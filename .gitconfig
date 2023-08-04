@@ -1,0 +1,28 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Brandon Moon
+	email = brandon.moon@liveauctioneers.com
+[pull]
+	rebase = true ; Rebase instead of merge when pulling
+[push]
+	default = current
+[remote]
+	pushDefault = origin
+[help]
+	autocorrect = 1 ; Autocorrect mistyped commands
+[core]
+	excludesfile = /Users/bmoon/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[alias]
+	co = checkout
+	br = branch
+[credential]
+	helper = 
+	helper = /usr/local/bin/git-credential-manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true

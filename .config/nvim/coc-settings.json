@@ -1,0 +1,12 @@
+{
+  "colors.enable": true,
+  "highlight.colors.enable": true,
+  "coc.preferences.formatOnSave": true,
+  "eslint.enable": true,
+  "eslint.autoFixOnSave": true,
+  "list.height": 30,
+  "snippets.ultisnips.pythonPrompt": false,
+  "suggest.enablePreselect": true,
+  "tsserver.implicitProjectConfig.checkJs": true,
+  "tsserver.npm": "npm"
+}
