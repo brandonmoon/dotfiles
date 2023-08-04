@@ -1,6 +1,13 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+# Custom PATH updates
+export PATH=/opt/homebrew/bin:$PATH
+export PATH=/usr/local/bin:$PATH
+export PATH=$HOME/bin:$PATH
+export PATH=$HOME/Library/Android/sdk/platform-tools:$PATH
+export PATH=$HOME/Library/Android/sdk/emulator:$PATH
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -67,6 +74,20 @@ source $ZSH/oh-my-zsh.sh
 
 # User Configuration
 
+# env setup
+export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export EDITOR=nvim
+export CLICOLOR=true
+
+# aliases
+alias rnadb="adb reverse tcp:8081 tcp:8081"
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
+alias ll="ls -l"
+alias la="ls -la"
+
 # Rbenv init
 eval "$(rbenv init - zsh)"
 
@@ -80,24 +101,3 @@ base16_default-dark
 
 # fzf setup
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# override path
-export PATH=/opt/homebrew/bin:$PATH
-export PATH=/usr/local/bin:$PATH
-export PATH=$HOME/bin:$PATH
-export PATH=$HOME/Library/Android/sdk/platform-tools:$PATH
-export PATH=$HOME/Library/Android/sdk/emulator:$PATH
-
-# aliases
-alias rnadb="adb reverse tcp:8081 tcp:8081"
-alias v="nvim"
-alias vi="nvim"
-alias vim="nvim"
-alias ll="ls -l"
-alias la="ls -la"
-
-# env setup
-export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export EDITOR=nvim
-export CLICOLOR=true

@@ -2,7 +2,7 @@
 
 # shellcheck shell=bash disable=SC2059
 
-# This script symlinks everything from $FROMPATH (default: ./Development/dotfiles/) into
+# This script symlinks everything from $FROMPATH (default: ./) into
 # $TOPATH (default: $HOME). Anything that would be overwritten is copied into
 # $BACKUP (default: $TOPATH/backup/).
 
@@ -24,7 +24,7 @@ mkdir -p "$BACKUP"
 run_cmd=${DRY_RUN:+echo} # Set DRY_RUN to echo what we would do.
 
 if [ -z "${FROMPATH:-}" ]; then
-  cd "$(dirname "$0")/Development/dotfiles/"
+  cd "$(dirname "$0")"
 else
   cd "$FROMPATH"
 fi
@@ -33,6 +33,9 @@ fi
 printf "❯❯❯ Updating dotfile symlinks (linking from path: $FROMPATH)\n\n"
 
 while read -r FILE; do
+  if [[ $FILE = .git/* ]] || [[ $FILE = README.md ]] || [[ $FILE = link.sh ]]; then
+    continue;
+  fi
   $run_cmd mkdir -p "$TOPATH/$(dirname "$FILE")"
   if [[ -d "$TOPATH/$FILE" && ! -L "$TOPATH/$FILE" ]]; then      # Directory.
     printf "${RED}DIRSKIP: $TOPATH/$FILE is a directory!${NC}\n" # This shouldn't happen.
