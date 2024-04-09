@@ -7,6 +7,7 @@ export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/Library/Android/sdk/platform-tools:$PATH
 export PATH=$HOME/Library/Android/sdk/emulator:$PATH
+export PATH=$HOME/go/bin:$PATH
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -68,7 +69,7 @@ ZSH_THEME="spaceship"
 # custom plugins may be added to $zsh_custom/plugins/
 # example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git fzf pod tmux yarn zsh-interactive-cd zsh-navigation-tools npm zsh-pnpm)
+plugins=(git fzf pod tmux zsh-interactive-cd zsh-navigation-tools npm zsh-pnpm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -77,6 +78,7 @@ source $ZSH/oh-my-zsh.sh
 # env setup
 export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export EDITOR=nvim
 export CLICOLOR=true
 
@@ -92,12 +94,23 @@ alias la="ls -la"
 eval "$(rbenv init - zsh)"
 
 # Base16 Shell
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        source "$BASE16_SHELL/profile_helper.sh"
+# BASE16_SHELL="$HOME/.config/base16-shell/"
+# [ -n "$PS1" ] && \
+#     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#         source "$BASE16_SHELL/profile_helper.sh"
         
-base16_default-dark
+# base16_bright
 
 # fzf setup
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# pnpm
+export PNPM_HOME="/Users/bmoon/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+

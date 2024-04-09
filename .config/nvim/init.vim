@@ -37,6 +37,7 @@ set termguicolors
 inoremap jj <Esc>
 " Re-map Ctrl-s to save
 nnoremap <silent> <C-s> :write<CR>
+
 " Plugins
 " Install vim-plug for vim and neovim
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -52,7 +53,7 @@ Plug 'tpope/vim-unimpaired' " some simple shortcuts for navigation, e.g. ]g and 
 Plug 'tpope/vim-repeat' " repeat commands like above w/ .
 Plug 'tpope/vim-fugitive' " git commands in vim
 Plug 'sheerun/vim-polyglot' " tons of language syntax definitions
-Plug 'jiangmiao/auto-pairs' " auto-add closing match to (){}[] etc...
+Plug 'Raimondi/delimitMate' " auto-add closing match to (){}[] etc...
 Plug 'Yggdroot/indentLine' " Shows indent line bars for reference
 Plug 'itchyny/lightline.vim' " Colorful and configurable status bar line
 Plug 'airblade/vim-gitgutter' " Show +-~ in gutter
@@ -63,19 +64,38 @@ Plug 'mbbill/undotree' " Show a sidebar w/ undo history (incl branches)
 Plug 'junegunn/gv.vim' " Show and browse git history in a new tab (requires vim-fugitive)
 Plug 'psliwka/vim-smoothie' " Make paging up and down scroll smoothly
 Plug 'dbeniamine/todo.txt-vim' " todo.txt shortcuts
-Plug 'preservim/nerdtree' | " File browser sidebar
-                  \ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'bfredl/nvim-miniyank' " Allows for a history of yank commands
-Plug 'honza/vim-snippets' " A library of auto-compolete snippets
 Plug 'christoomey/vim-tmux-navigator' " Use window nav vim shortcuts seamlessly with tmux windows as well
 Plug 'tinted-theming/base16-vim' " theme
+Plug 'atelierbram/Base4Tone-nvim' " theme
+Plug 'atelierbram/Base4Tone-vim' " theme
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
+Plug 'nvim-tree/nvim-web-devicons'
 call plug#end()
-" indent line
+
+" colorscheme
+set background=dark
+colorscheme Base4Tone_Modern_N_Dark
+" if exists('$BASE16_THEME')
+"     \ && (!exists('g:colors_name') || g:colors_name != 'base16-$BASE16_THEME')
+"   let base16_colorspace=256
+"   colorscheme base16-$BASE16_THEME
+" endif
+
+"indent line
 let g:indentLine_char = '┆'
+
 "lightline
 function! LightLineGitBlame() 
   return get(g:, 'coc_git_status', '')
+endfunction
+function! LightlineMode() abort
+    let ftmap = {
+                \ 'coc-explorer': 'EXPLORER',
+                \ 'fugitive': 'FUGITIVE'
+                \ }
+    return get(ftmap, &filetype, lightline#mode())
 endfunction
 let g:lightline = {
       \ 'active': {
@@ -83,32 +103,47 @@ let g:lightline = {
       \             [ 'git' ],
       \             [ 'readonly', 'filename','modified' ] ],
       \   'right': [ ['cocstatus'],
+      \              ['codeium'],
       \              ['filetype', 'percent', 'lineinfo'] ]
       \ },
       \ 'component_function': {
       \   'cocstatus': 'coc#status',
+      \   'codeium': 'codeium#GetStatusString',
       \   'git': 'LightLineGitBlame',
+      \   'mode': 'LightlineMode'
       \ },
+      \ 'colorscheme': 'Base4Tone_Modern_N',
       \ }
-" colorscheme
-if exists('$BASE16_THEME')
-    \ && (!exists('g:colors_name') 
-    \ || g:colors_name != 'base16-$BASE16_THEME')
-  let base16colorspace=256
-  colorscheme base16-$BASE16_THEME
-endif
+
 " fzf
 nnoremap <silent> P :GFiles<CR>
 nnoremap <silent> K :Rg<CR>
-" nerdtree
-nnoremap <C-n> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
-" let g:NERDTreeMinimalMenu = 1 " workaround for bottom area resize issue
+
 " undo tree
 if has("persistent_undo")
   set undofile
 endif
-" === CoC ===
+
+" Todo.txt setup
+au filetype todo setlocal omnifunc=todo#Complete
+au filetype todo imap <buffer> + +<C+Z><C-O>
+au filetype todo imap <buffer> @ @<C+Z><C-O>
+
+" miniyank
+map p <Plug>(miniyank-autoput)
+map <leader>p <Plug>(miniyank-startput)
+map <leader>P <Plug>(miniyank-startPut)
+map <leader>n <Plug>(miniyank-cycle)
+map <leader>N <Plug>(miniyank-cycleback)
+
+" treesitter
+lua require'nvim-treesitter.configs'.setup {
+      \highlight = {
+      \enable = true,
+      \}
+      \}
+
+" ========== CoC ==========
 " List of extensions to install
 let g:coc_global_extensions = [
       \ 'coc-tsserver',
@@ -123,7 +158,6 @@ let g:coc_global_extensions = [
       \ 'coc-html',
       \ 'coc-css',
       \ 'coc-sql',
-      \ 'coc-snippets',
       \ 'coc-git',
       \ 'coc-yank',
       \ 'coc-lists',
@@ -141,21 +175,27 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-" Use M to show documentation in preview window.
-nnoremap <silent> M :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+
+" Use M to show documentation in preview window
+nnoremap <silent> M :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    call feedkeys('M', 'in')
   endif
 endfunction
+
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
+
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
 " coc-snippet mappings
 imap <C-l> <Plug>(coc-snippets-expand)
 vmap <C-j> <Plug>(coc-snippets-select)
@@ -163,12 +203,13 @@ let g:coc_snippet_next = '<c-j>'
 let g:coc_snippet_prev = '<c-k>'
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 xmap <leader>x <Plug>(coc-convert-snippet)
+
 " coc tab autocomplete
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
+" inoremap <silent><expr> <TAB>
+"       \ coc#pum#visible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ CheckBackspace() ? "\<TAB>" :
+"       \ coc#refresh()
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
@@ -177,22 +218,64 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Applying code actions to the selected code block
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer
+nmap <leader>as  <Plug>(coc-codeaction-source)
+" Apply the most preferred quickfix action to fix diagnostic on the current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Remap keys for applying refactor code actions
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+" Run the Code Lens action on the current line
+nmap <leader>cl  <Plug>(coc-codelens-action)
+
+" Remap <C-f> and <C-b> to scroll float windows/popups
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
 let g:coc_snippet_next = '<tab>'
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
-" === ===
-" Todo.txt setup
-au filetype todo setlocal omnifunc=todo#Complete
-au filetype todo imap <buffer> + +<C+Z><C-O>
-au filetype todo imap <buffer> @ @<C+Z><C-O>
-" miniyank
-map p <Plug>(miniyank-autoput)
-map <leader>p <Plug>(miniyank-startput)
-map <leader>P <Plug>(miniyank-startPut)
-map <leader>n <Plug>(miniyank-cycle)
-map <leader>N <Plug>(miniyank-cycleback)
-" treesitter
-lua require'nvim-treesitter.configs'.setup {
-      \highlight = {
-      \enable = true,
-      \}
-      \}
+
+" coc-explorer
+nmap <leader>e :CocCommand explorer<CR>
+nmap <Leader>er <Cmd>call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])<CR>
+autocmd ColorScheme *
+  \ hi CocExplorerNormalFloatBorder guifg=#414347 guibg=#272B34
+  \ | hi CocExplorerNormalFloat guibg=#272B34
+  \ | hi CocExplorerSelectUI guibg=blue
+let g:indentLine_fileTypeExclude=['coc-explorer']
+
+" Run jest for current project
+command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
+
+" Run jest for current file
+command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
+nnoremap <leader>T :call CocAction('runCommand', 'jest.fileTest', ['%'])<CR>
+
+" Run jest for current test
+nnoremap <leader>t :call CocAction('runCommand', 'jest.singleTest')<CR>
+
+" Init jest in current cwd, require global jest command exists
+command! JestInit :call CocAction('runCommand', 'jest.init')

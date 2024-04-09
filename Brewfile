@@ -1,6 +1,6 @@
 # brew tap
 tap "homebrew/cask-fonts"
-tap "adoptopenjdk/openjdk"
+tap "homebrew/cask-versions"
 tap "facebook/fb"
 tap "microsoft/git"
 
@@ -17,5 +17,6 @@ brew "idb-companion" # Don't ask me why this isn't "cask"
 
 # cask
 cask "font-fira-code"
-cask "adoptopenjdk11"
+cask "font-fira-code-nerd-font"
+cask "zulu17"
 cask "git-credential-manager-core"
