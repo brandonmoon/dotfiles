@@ -72,6 +72,7 @@ Plug 'atelierbram/Base4Tone-vim' " theme
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 Plug 'nvim-tree/nvim-web-devicons'
+Plug 'suan/vim-instant-markdown' " Instant markdown preview
 call plug#end()
 
 " colorscheme
