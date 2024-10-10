@@ -73,6 +73,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'suan/vim-instant-markdown' " Instant markdown preview
+Plug 'tribela/transparent.nvim'
 call plug#end()
 
 " colorscheme

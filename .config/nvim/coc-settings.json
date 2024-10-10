@@ -4,7 +4,7 @@
   "colors.enable": true,
   "eslint.autoFixOnSave": true,
   "eslint.enable": true,
-  "eslint.packageManager": "pnpm",
+  "eslint.packageManager": "npm",
   "explorer.file.reveal.auto": true,
   "highlight.colors.enable": true,
   "list.height": 30,
