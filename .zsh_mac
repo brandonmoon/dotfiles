@@ -11,6 +11,8 @@ export ANDROID_SDK_ROOT="$HOME/Library/Android/Sdk"
 export ANDROID_HOME="$HOME/Library/Android/Sdk"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
+alias p="pnpm"
+
 # Rbenv init
 eval "$(rbenv init - zsh)"
 
@@ -20,6 +22,6 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-pnpm end
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# iterm2 shell integration
+# test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

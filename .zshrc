@@ -3,10 +3,10 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # User Configuration
 if [[ $(uname) == "Darwin" ]]; then
-    source ".zsh_mac"
+    source ~/.zsh_mac
 
 elif command -v apt > /dev/null; then
-    source ".zsh_linux"
+    source ~/.zsh_linux
 
 else
     echo 'Unknown OS!'
@@ -33,7 +33,7 @@ alias la="ls -la"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="spaceship" 
+ZSH_THEME="" 
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

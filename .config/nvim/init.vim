@@ -17,7 +17,6 @@ set title
 set number 
 set cursorline
 set ruler
-set mouse=""
 set laststatus=2 " statusbar
 " Misc
 set ignorecase
