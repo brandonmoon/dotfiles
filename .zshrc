@@ -15,6 +15,9 @@ fi
 export EDITOR=nvim
 export CLICOLOR=true
 
+# source secrets if they exists
+[ -f ~/.zsh_secrets ] && source ~/.zsh_secrets
+
 # aliases
 alias rnadb="adb reverse tcp:8081 tcp:8081"
 alias v="nvim"
@@ -33,7 +36,7 @@ alias la="ls -la"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="" 
+ZSH_THEME="spaceship" 
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -89,7 +92,7 @@ ZSH_THEME=""
 # custom plugins may be added to $zsh_custom/plugins/
 # example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git fzf pod tmux zsh-interactive-cd zsh-navigation-tools npm)
+plugins=(git fzf zsh-interactive-cd zsh-navigation-tools npm)
 
 source $ZSH/oh-my-zsh.sh
 

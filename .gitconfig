@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
 	name = Brandon Moon
-	email = brandon.moon@liveauctioneers.com
+	email = brandonmoon@auctiontechnologygroup.com
 [pull]
 	rebase = true ; Rebase instead of merge when pulling
 [push]
