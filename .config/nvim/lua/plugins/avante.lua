@@ -1,20 +1,30 @@
 return {
-
   "yetone/avante.nvim",
+  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  -- ⚠️ must add this setting! ! !
+  build = function()
+    -- conditionally use the correct build system for the current OS
+    if vim.fn.has("win32") == 1 then
+      return "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+    else
+      return "make"
+    end
+  end,
   event = "VeryLazy",
-  lazy = false,
-  version = false, -- set this if you want to always pull the latest change
+  version = false, -- Never set this value to "*"! Never!
+  ---@module 'avante'
+  ---@type avante.Config
   opts = {
     -- add any opts here
+    -- for example
+    provider = "claude",
   },
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  build = "make",
   dependencies = {
-    "nvim-treesitter/nvim-treesitter",
-    "stevearc/dressing.nvim",
     "nvim-lua/plenary.nvim",
     "MunifTanjim/nui.nvim",
     --- The below dependencies are optional,
+    "ibhagwan/fzf-lua", -- for file_selector provider fzf
+    "folke/snacks.nvim", -- for input provider snacks
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
     "zbirenbaum/copilot.lua", -- for providers='copilot'
     {
