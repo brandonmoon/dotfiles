@@ -1,19 +1,16 @@
 # brew tap
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
-tap "facebook/fb"
 tap "microsoft/git"
 
 # packages
 brew "neovim"
 brew "node"
 brew "python3"
-brew "tmux"
+# brew "tmux"
 brew "watchman"
-brew "yarn"
 brew "ripgrep"
-brew "reattach-to-user-namespace"
-brew "idb-companion" # Don't ask me why this isn't "cask"
+# brew "reattach-to-user-namespace"
 
 # cask
 cask "font-fira-code"
