@@ -1,6 +1,4 @@
 # brew tap
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
 tap "microsoft/git"
 
 # packages
@@ -11,9 +9,11 @@ brew "python3"
 brew "watchman"
 brew "ripgrep"
 # brew "reattach-to-user-namespace"
+brew "fzf"
+brew "lazygit"
 
 # cask
 cask "font-fira-code"
 cask "font-fira-code-nerd-font"
-cask "zulu17"
-cask "git-credential-manager-core"
+cask "zulu@17"
+cask "git-credential-manager"
